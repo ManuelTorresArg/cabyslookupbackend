@@ -1,0 +1,53 @@
+Heroku Port
+-----------
+https://dev.to/vanwildemeerschbrent/how-to-deploy-your-node-app-api-on-heroku-44n6
+
+git push heroku main
+heroku ps:scale web=1
+heroku open
+
+
+Use docker exec (easiest)
+-------------------------
+Docker version 1.3 or newer supports the command exec that behave similar to nsenter. This command can run new process in already running container (container must have PID 1 process running already). You can run /bin/bash to explore container state:
+
+docker exec -t -i mycontainer /bin/bash
+
+>>> Reconstruir / construir
+
+docker build -t node-cabys-server
+
+>>> Comandos para correr docker desde docker file
+
+docker run -it -p 8888:3000 node-cabys-server
+
+
+Configuración de certificado
+----------------------------
+To generate a self-signed certificate, run the following in your shell:
+
+openssl genrsa -out key.pem
+openssl req -new -key key.pem -out csr.pem
+openssl x509 -req -days 9999 -in csr.pem -signkey key.pem -out cert.pem
+rm csr.pem
+This should leave you with two files, cert.pem (the certificate) and key.pem (the private key). Put these files in the same directory as your Node.js server file. This is all you need for a SSL connection. So now you set up a quick hello world example (the biggest difference between https and http is the options parameter):
+
+const https = require('https');
+const fs = require('fs');
+
+const options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
+
+https.createServer(options, function (req, res) {
+  res.writeHead(200);
+  res.end("hello world\n");
+}).listen(8000);
+
+Paquetes NPM Instalados
+----------------------------------------------------------------
+
+npm i cors
+npm i HTTPS
+npm i http
