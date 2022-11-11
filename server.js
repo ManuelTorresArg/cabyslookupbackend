@@ -19,6 +19,47 @@ app.get('/api/:producto/:codigo', (req, res) => {
 
     console.log(strProd+ ' ' + strCodigo) 
 
+var file = 'articulos.db';
+
+//Abrimos la base de datos
+let db = new sqlite3.Database(file, (err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Connected to the in-memory SQlite database.');
+  });
+
+
+//Realizamos la consulta
+
+db.all(`SELECT cabys, iva, codbar, desc FROM articulos where codbar=${}`, function(err, rows) {
+    rows.forEach(function (row) {
+        console.log(row.first_name, row.last_name);
+    })
+});	
+db.close();
+
+
+var file = 'articulos.db';
+
+//Abrimos la base de datos
+let db = new sqlite3.Database(file, (err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Connected to the in-memory SQlite database.');
+  });
+
+
+//Realizamos la consulta
+
+db.all(}`SELECT cabys, iva, codbar, desc FROM articulos where codbar=${}`, function(err, rows) {
+    rows.forEach(function (row) {
+        console.log(row.first_name, row.last_name);
+    })
+});	
+db.close();
+
     var miRespuesta = {
         'CABYS' : miCabys,
         'DESCRIPCION' : data[item][1],
