@@ -36,14 +36,29 @@ app.get("/cabys/:codigo", (req, res) => {
 
       console.log(result);
 
-      var miRespuesta = {
+    try {var miRespuesta = {
         'CABYS' : result[0].cabys,
         'CODBAR' : result[0].codbar,
         'DESCCABYS' : result[0].desccabys,
         'DESCRIPCION' : descripcion,
         'IMPUESTO' : result[0].impuesto,
         'CODBAR' : strCodigo
+    }} catch(error) {
+        console.log(error);
+    } finally {
+        var miRespuesta = {
+            'CABYS' : "result[0].cabys",
+            'CODBAR' : "result[0].codbar",
+            'DESCCABYS' : "result[0].desccabys",
+            'DESCRIPCION' : "descripcion",
+            'IMPUESTO' : "result[0].impuesto",
+            'CODBAR' : "strCodigo"
+        }
+
     }
+
+
+
 
     console.log(miRespuesta);
 
@@ -53,6 +68,8 @@ app.get("/cabys/:codigo", (req, res) => {
       
     });
   });
+
+  //Toma el valor del puerto del entorno, no es necesario agregarlo en la URL para render
 
   const port = process.env.PORT || 3000;
 
