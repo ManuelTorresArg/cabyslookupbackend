@@ -35,30 +35,17 @@ app.get("/cabys/:codigo", (req, res) => {
       });
 
       console.log(result);
+      console.log(result[0].cabys);
+      console.log(result[0].desccabys);
 
-    try {var miRespuesta = {
+      var miRespuesta = {
         'CABYS' : result[0].cabys,
         'CODBAR' : result[0].codbar,
         'DESCCABYS' : result[0].desccabys,
         'DESCRIPCION' : descripcion,
         'IMPUESTO' : result[0].impuesto,
         'CODBAR' : strCodigo
-    }} catch(error) {
-        console.log(error);
-    } finally {
-        var miRespuesta = {
-            'CABYS' : "result[0].cabys",
-            'CODBAR' : "result[0].codbar",
-            'DESCCABYS' : "result[0].desccabys",
-            'DESCRIPCION' : "descripcion",
-            'IMPUESTO' : "result[0].impuesto",
-            'CODBAR' : "strCodigo"
-        }
-
     }
-
-
-
 
     console.log(miRespuesta);
 
