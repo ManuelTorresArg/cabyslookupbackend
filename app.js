@@ -49,9 +49,7 @@ app.get("/cabys/:codigo", (req, res) => {
 
     console.log(miRespuesta);
 
-    res.send(miRespuesta);
-
-      
+    res.send(miRespuesta);      
       
     });
   });
