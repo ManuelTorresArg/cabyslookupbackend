@@ -35,17 +35,30 @@ app.get("/cabys/:codigo", (req, res) => {
       });
 
       console.log(result);
-      console.log(result[0].cabys);
-      console.log(result[0].desccabys);
+      console.log(isEmptyObject(result));
 
-      var miRespuesta = {
-        'CABYS' : result[0].cabys,
-        'CODBAR' : result[0].codbar,
-        'DESCCABYS' : result[0].desccabys,
-        'DESCRIPCION' : descripcion,
-        'IMPUESTO' : result[0].impuesto,
-        'CODBAR' : strCodigo
-    }
+
+      if (! isEmptyObject(result)) {
+          var miRespuesta = {
+          'CABYS' : result[0].cabys,
+          'CODBAR' : result[0].codbar,
+          'DESCCABYS' : result[0].desccabys,
+          'DESCRIPCION' : descripcion,
+          'IMPUESTO' : result[0].impuesto,
+          'CODBAR' : strCodigo
+          }
+      } else {
+
+        var miRespuesta = {
+          'CABYS' : "Error",
+          'CODBAR' : "Error",
+          'DESCCABYS' : "Error",
+          'DESCRIPCION' : "Error",
+          'IMPUESTO' : "Error",
+          'CODBAR' : "Error"
+          }
+      }
+
 
     console.log(miRespuesta);
 
@@ -63,3 +76,7 @@ app.get("/cabys/:codigo", (req, res) => {
   server.listen(port, () => {
         console.log(`Puerto: ${port}`)
     })
+
+  function isEmptyObject(obj){
+      return Object.keys(obj).length === 0;
+      }
