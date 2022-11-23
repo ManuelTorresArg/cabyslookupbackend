@@ -31,7 +31,7 @@ app.get("/cabys/:codigo", (req, res) => {
       }
       result.forEach((row) => {
         console.log(row)
-        descripcion += " + " + row.descripcion;        
+        descripcion += " - " + row.descripcion;        
       });
 
       console.log(result);
