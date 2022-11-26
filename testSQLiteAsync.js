@@ -6,7 +6,7 @@ const app = express()
 const sqlite3 = require('sqlite3').verbose();
 
 app.use(cors());
-var file = 'mis_datos4.db';
+var file = 'mis_datos.db';
 
 var db = new sqlite3.Database(file, (err) => {
     if (err) {
@@ -20,6 +20,8 @@ app.get("/cabys/:codigo", (req, res) => {
     const strCodigo = req.params.codigo;
     const sql = "SELECT * FROM articulos WHERE codbar="+strCodigo;
 
+    console.log(strCodigo);
+
     var descripcion = "";
     var cabys ="";
   
@@ -32,12 +34,14 @@ app.get("/cabys/:codigo", (req, res) => {
         descripcion += " + " + row.descripcion;        
       });
 
-      console.log(descripcion);
+      console.log(result);
 
       var miRespuesta = {
         'CABYS' : result[0].cabys,
+        'CODBAR' : result[0].codbar,
+        'DESCCABYS' : result[0].desccabys,
         'DESCRIPCION' : descripcion,
-        'IMPUESTO' : "Impuesto",
+        'IMPUESTO' : result[0].impuesto,
         'CODBAR' : strCodigo
     }
 
