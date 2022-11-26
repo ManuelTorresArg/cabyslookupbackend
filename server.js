@@ -10,14 +10,6 @@ var csvsync = require('csvsync');
 // Para evitar problemas de cross origin habilitamos cors para todo origen
 app.use(cors());
 
-var file = 'articulos.db';
-
-var valores = [];
-
-var strDescResponse = "";
-var strCodBarResponse = "";
-var strCabysResponse = "";
-
 //Esperamos una comunicación tipo GET con un parametro dinámico
 app.get('/api/:producto/:codigo', (req, res) => {
 
@@ -26,59 +18,40 @@ app.get('/api/:producto/:codigo', (req, res) => {
     const strCodigo = req.params.codigo;
 
     console.log(strProd+ ' ' + strCodigo) 
-    console.log(strProd+ ' ' + strCodigo) 
+
+var file = 'articulos.db';
+
+//Abrimos la base de datos
+let db = new sqlite3.Database(file, (err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Connected to the in-memory SQlite database.');
+  });
+
 
 //Realizamos la consulta
 
-valores = function (cb) {
-
-    let respuesta = [];
-
-        //Abrimos la base de datos
-    let db = new sqlite3.Database(file, (err) => {
-        if (err) {
-        return console.error(err.message);
-        }
-        console.log('Connected to the in-memory SQlite database.');
-    });
-
-    db.all(`SELECT * FROM articulos WHERE codbar=${strCodigo}`, function(err, rows) {
+db.all(`SELECT cabys, iva, codbar, desc FROM articulos where codbar=${strCodigo}`, function(err, rows) {
     rows.forEach(function (row) {
-        console.log(row.codbar, row.descripcion, row.cabys);
-        strDescResponse += " + "+row.descripcion;
-        strCodBarResponse = row.codbar;
-        strCabysResponse = row.cabys;
-
-        console.log(strDescResponse);
-        console.log(strCodBarResponse);
-        console.log(strCabysResponse);
-
+        console.log(row.cabys, row.iva, row.codbar, row.desc);
     })
-
-    respuesta.append(strDescResponse);
-    respuesta.append(strCodBarResponse);
-    respuesta.append(strCabysResponse);
-
 });	
 db.close();
 
-return cb(null,respuesta);
-
-}
-
-var miRespuesta = {
-    'CABYS' : valores[2],
-    'DESCRIPCION' : valores[0],
-    'IMPUESTO' : "Impuesto",
-    'CODBAR' : strCodigo
-}
+    var miRespuesta = {
+        'CABYS' : miCabys,
+        'DESCRIPCION' : data[item][1],
+        'IMPUESTO' : data[item][2],
+        'CODBAR' : strCodigo
+    }
 
 
     //muestro resultado por consola
     console.log(miRespuesta)    
 
     //hago res send de la respuesta
-    if (strCabysResponse.length !=0) {
+    if (miCabys.length !=0) {
         res.send(miRespuesta)
     } else {
         res.send("No encontrado")
